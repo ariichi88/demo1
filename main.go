@@ -41,9 +41,11 @@ func main() {
 
 	b2 := widget.NewButton("New Window", func() { intentWindow(a) }) 
 
+	e := widget.NewEntry()
+
 	w.SetContent(
 		container.NewVBox(
-			b1, b2, l1,
+			b1, b2, e, l1,
 		),
 	)
 
