@@ -1,8 +1,6 @@
 package main
 
 import (
-	"runtime"
-
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -28,26 +26,28 @@ func main() {
 
 	w.SetMainMenu(mm)
 
-	l1 := widget.NewLabel("link to dialog")
+	l1 := widget.NewLabel("Selected")
 
-	b1 := widget.NewButton("Show Dialog", func() {
-		dialog.ShowConfirm("Dialog", "Confirm Dialog", func(r bool) {
-			if r {
-				l1.SetText("Yes Clicked!")
-			} else {
-				l1.SetText("No Clicked!")
-			}}, w)
-		})
-
-	b2 := widget.NewButton("New Window", func() { intentWindow(a) }) 
-
-	e := widget.NewEntry()
-
-	w.SetContent(
-		container.NewVBox(
-			b1, b2, e, l1,
+	t := container.NewAppTabs(
+		container.NewTabItem("Dialog",
+			widget.NewButton("Show Dialog", func() {
+				dialog.ShowConfirm("Dialog", "Confirm Dialog", func(r bool) {
+					if r {
+						l1.SetText("Yes Clicked!")
+					} else {
+						l1.SetText("No Clicked!")
+					}
+				},w)
+			}),
 		),
+		container.NewTabItem("Window",
+			widget.NewButton("New Window", func() { intentWindow(a)
+		})),
 	)
+
+	t.SetTabLocation(container.TabLocationTop)
+
+	w.SetContent(t)
 
 	w.ShowAndRun()
 }
@@ -57,23 +57,16 @@ func intentWindow(a fyne.App) {
 	w2 := a.NewWindow("New Window")
 	w2.Resize(fyne.NewSize(400,350))
 
-	l2 := widget.NewLabel("This System is")
-
-	b3 := widget.NewButton("Detect System", func() {
-		l2.SetText(runtime.GOOS)
-	})
-
 	b4 := widget.NewButton("close this", func() {
 		w2.Close()
 	})
 
 	w2.SetContent(
 		container.NewVBox(
-			b3, b4, l2,
+			b4,
 		),
 	)
 
 	w2.Show()
 }
 
-	
