@@ -10,63 +10,65 @@ import (
 
 func main() {
 	
-	a := app.New()
+	myApp := app.New()
 
-	w := a.NewWindow("app test")
-	w.Resize(fyne.NewSize(400, 350))
+	myWindow := myApp.NewWindow("app test")
+	myWindow.Resize(fyne.NewSize(400, 350))
 	
-	mm := fyne.NewMainMenu(
+	mainMenu := fyne.NewMainMenu(
 		fyne.NewMenu("file",
 			fyne.NewMenuItem("New", nil),
 			fyne.NewMenuItem("Close", func() {
-				w.Close()
+				myWindow.Close()
 			}),
 		),
 	)
 
-	w.SetMainMenu(mm)
+	myWindow.SetMainMenu(mainMenu)
 
-	l1 := widget.NewLabel("Selected")
+	label1 := widget.NewLabel("Choose")
 
-	t := container.NewAppTabs(
-		container.NewTabItem("Dialog",
-			widget.NewButton("Show Dialog", func() {
-				dialog.ShowConfirm("Dialog", "Confirm Dialog", func(r bool) {
-					if r {
-						l1.SetText("Yes Clicked!")
-					} else {
-						l1.SetText("No Clicked!")
-					}
-				},w)
-			}),
-		),
-		container.NewTabItem("Window",
-			widget.NewButton("New Window", func() { intentWindow(a)
-		})),
-	)
+	label2 := widget.NewLabel("Window")
 
-	t.SetTabLocation(container.TabLocationTop)
-
-	w.SetContent(t)
-
-	w.ShowAndRun()
-}
-
-func intentWindow(a fyne.App) {
-
-	w2 := a.NewWindow("New Window")
-	w2.Resize(fyne.NewSize(400,350))
-
-	b4 := widget.NewButton("close this", func() {
-		w2.Close()
+	button1 := widget.NewButton("Show Dialog", func() {
+		dialog.ShowConfirm("Dialog", "Confirm Dialog", func(r bool) {
+			if r {
+				label1.SetText("Yes Clicked!")
+			} else {
+				label1.SetText("No Clicked!")
+			}
+		},myWindow)
 	})
 
-	w2.SetContent(
+	button2 := widget.NewButton("NewWindow", func()	{NewWindow(myApp)})
+
+	tabs := container.NewAppTabs(
+		container.NewTabItem("Dialog", container.NewVBox(label1, button1),),
+		container.NewTabItem("Window", container.NewVBox(label2,button2),),
+	)
+
+	tabs.SetTabLocation(container.TabLocationTop)
+
+	myWindow.SetContent(tabs)
+
+	myWindow.ShowAndRun()
+}
+
+func NewWindow(myApp fyne.App) {
+
+	myWindow2 := myApp.NewWindow("New Window")
+	myWindow2.Resize(fyne.NewSize(400,350))
+
+	button3 := widget.NewButton("close this", func() {
+		myWindow2.Close()
+	})
+
+	myWindow2.SetContent(
 		container.NewVBox(
-			b4,
+			button3,
 		),
 	)
 
-	w2.Show()
+	myWindow2.Show()
 }
 
