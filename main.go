@@ -22,29 +22,32 @@ func main() {
 				myWindow.Close()
 			}),
 		),
+		fyne.NewMenu("edit",
+			fyne.NewMenuItem("copy", nil),
+			fyne.NewMenuItem("cut", nil),
+			fyne.NewMenuItem("paste", nil),
+		),
 	)
 
 	myWindow.SetMainMenu(mainMenu)
 
-	label1 := widget.NewLabel("Choose")
-
-	label2 := widget.NewLabel("Window")
-
-	button1 := widget.NewButton("Show Dialog", func() {
-		dialog.ShowConfirm("Dialog", "Confirm Dialog", func(r bool) {
-			if r {
-				label1.SetText("Yes Clicked!")
-			} else {
-				label1.SetText("No Clicked!")
-			}
-		},myWindow)
+	button1 := widget.NewButton("Confirm Dialog", func() {
+		dialog.ShowConfirm("Dialog", "Confirm Dialog", nil, myWindow)
 	})
 
-	button2 := widget.NewButton("NewWindow", func()	{NewWindow(myApp)})
+	button2 := widget.NewButton("Entry Dialog", func() {
+		dialog.ShowEntryDialog("Dialog", "Entry Dialog", nil, myWindow)
+	})
+
+	button3 := widget.NewButton("Information", func() {
+		dialog.ShowInformation("Dialog", "Infoermation", myWindow)
+	})
+
+	button5 := widget.NewButton("NewWindow", func()	{NewWindow(myApp)})
 
 	tabs := container.NewAppTabs(
-		container.NewTabItem("Dialog", container.NewVBox(label1, button1),),
-		container.NewTabItem("Window", container.NewVBox(label2,button2),),
+		container.NewTabItem("Dialog", container.NewVBox(button1, button2, button3),),
+		container.NewTabItem("Window", container.NewVBox(button5),),
 	)
 
 	tabs.SetTabLocation(container.TabLocationTop)
@@ -59,13 +62,13 @@ func NewWindow(myApp fyne.App) {
 	myWindow2 := myApp.NewWindow("New Window")
 	myWindow2.Resize(fyne.NewSize(400,350))
 
-	button3 := widget.NewButton("close this", func() {
+	button6 := widget.NewButton("close this", func() {
 		myWindow2.Close()
 	})
 
 	myWindow2.SetContent(
 		container.NewVBox(
-			button3,
+			button6,
 		),
 	)
 
